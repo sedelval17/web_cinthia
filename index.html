@@ -20,25 +20,46 @@
 	<script type="application/ld+json">
 	{
 		"@context":"https://schema.org",
-		"@type":"Psychologist",
+		"@type":"MedicalBusiness",
+		"additionalType":"https://schema.org/Psychologist",
 		"name":"Lic. Cinthia Arroyo",
 		"description":"Psicoterapia online, evaluaciones y aptos psicológicos para personas en Argentina y argentinos viviendo en el extranjero.",
 		"url":"https://www.cinthiaarroyo.com.ar/",
 		"telephone":"+54 9 351 245 4985",
-		"areaServed":["Argentina","Argentinos en el exterior"],
-		"availableService":[{
-			"@type":"Service",
-			"name":"Psicoterapia online",
-			"serviceType":"Psicoterapia para adultos y adolescentes"
-		},{
-			"@type":"Service",
-			"name":"Evaluaciones y aptos psicológicos",
-			"serviceType":"Evaluaciones diagnósticas y certificaciones"
-		},{
-			"@type":"Service",
-			"name":"Terapia para argentinos en el exterior",
-			"serviceType":"Acompañamiento psicológico a distancia"
-		}],
+		"areaServed":[
+			{"@type":"Country","name":"Argentina"},
+			{"@type":"Thing","name":"Argentinos en el exterior"}
+		],
+		"hasOfferCatalog":{
+			"@type":"OfferCatalog",
+			"name":"Servicios terapéuticos",
+			"itemListElement":[
+				{
+					"@type":"Offer",
+					"itemOffered":{
+						"@type":"Service",
+						"name":"Psicoterapia online para adultos y adolescentes",
+						"areaServed":"Argentina y argentinos en el exterior"
+					}
+				},
+				{
+					"@type":"Offer",
+					"itemOffered":{
+						"@type":"Service",
+						"name":"Evaluaciones y aptos psicológicos",
+						"areaServed":"Argentina"
+					}
+				},
+				{
+					"@type":"Offer",
+					"itemOffered":{
+						"@type":"Service",
+						"name":"Terapia para argentinos en el exterior",
+						"areaServed":"Argentinos residentes fuera del país"
+					}
+				}
+			]
+		},
 		"contactPoint":{
 			"@type":"ContactPoint",
 			"contactType":"customer service",
