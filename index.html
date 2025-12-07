@@ -213,15 +213,15 @@
 	</style>
 </head>
 <body>
-	<header>
+	<header data-track-section="hero">
 		<div class="hero">
 			<div>
 				<div class="badge">Psicoterapia online · Evaluaciones</div>
 				<h1>Lic. Cinthia Arroyo</h1>
 				<p class="lead">Abordo problemáticas emocionales y conductuales con un enfoque profesional. Ofrezco un espacio terapéutico seguro para explorar, comprender y gestionar emociones. Acompaño a mis pacientes en la regulación emocional, el fortalecimiento de habilidades personales y la mejora de su bienestar integral.</p>
 				<div class="hero-actions">
-					<a class="button" href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer">Agendar turno por WhatsApp</a>
-					<a class="button secondary" href="#servicios">Conocer servicios</a>
+					<a class="button" href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer" data-track-cta="whatsapp-hero">Agendar turno por WhatsApp</a>
+					<a class="button secondary" href="#servicios" data-track-cta="ver-servicios">Conocer servicios</a>
 				</div>
 			</div>
 			<div class="hero-card">
@@ -236,7 +236,7 @@
 		</div>
 	</header>
 	<main>
-		<section id="acerca" class="section">
+		<section id="acerca" class="section" data-track-section="sobre_mi">
 			<div class="split">
 				<div>
 					<h2>Sobre mí</h2>
@@ -246,7 +246,7 @@
 				<div class="highlight">Licenciada en Psicología (UNC, 2014). Capacitación continua en evaluación diagnóstica, psicoterapia cognitivo-conductual y psicoanalítica, psicoeducación y abordajes psiconeuroinmunoendocrinológicos.</div>
 			</div>
 		</section>
-		<section id="servicios" class="section">
+		<section id="servicios" class="section" data-track-section="servicios">
 			<h2>Servicios terapéuticos</h2>
 			<p>Programas diseñados para acompañar procesos personales en modalidad online, con seguimiento cercano y coordinación con otros profesionales cuando es necesario.</p>
 			<div class="services">
@@ -264,7 +264,7 @@
 				</article>
 			</div>
 		</section>
-		<section id="metodo" class="section">
+		<section id="metodo" class="section" data-track-section="metodo">
 			<div class="split">
 				<div>
 					<h2>Enfoque y formación</h2>
@@ -279,7 +279,7 @@
 				<div class="highlight">Cada intervención se documenta con informes claros, seguimiento periódico y coordinación con profesionales de salud, educación u organizaciones cuando el caso lo requiere.</div>
 			</div>
 		</section>
-		<section id="testimonios" class="section">
+		<section id="testimonios" class="section" data-track-section="experiencia">
 			<h2>Experiencia profesional</h2>
 			<div class="testimonials">
 				<article class="testimonial">
@@ -296,17 +296,17 @@
 				</article>
 			</div>
 		</section>
-		<section id="contacto" class="section">
+		<section id="contacto" class="section" data-track-section="contacto">
 			<div class="contact">
 				<div>
 					<h2>Coordinemos un primer encuentro</h2>
 					<p>Hablame por WhatsApp para coordinar honorarios, disponibilidad y detalles técnicos. Trabajo 100% online para personas que residen en Argentina o en el exterior y necesitan continuidad terapéutica en español.</p>
 					<div class="hero-actions">
-						<a class="button" href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer">Enviar WhatsApp</a>
+						<a class="button" href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer" data-track-cta="whatsapp-contacto">Enviar WhatsApp</a>
 					</div>
 				</div>
 				<div class="contact-card">
-					<div><strong>Teléfono:</strong> <a href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer">+54 9 351 245 4985</a></div>
+					<div><strong>Teléfono:</strong> <a href="https://wa.me/5493512454985?text=Hola%20Cinthia%2C%20quiero%20agendar%20una%20consulta" target="_blank" rel="noreferrer" data-track-cta="whatsapp-contacto-inline">+54 9 351 245 4985</a></div>
 					<div><strong>Zona horaria:</strong> Argentina (GMT-3)</div>
 					<div><strong>Modalidad:</strong> Sesiones virtuales por videollamada</div>
 				</div>
@@ -316,5 +316,48 @@
 	<footer>
 		© <script>document.write(new Date().getFullYear());</script> Lic. Cinthia Arroyo · Psicología clínica y bienestar emocional
 	</footer>
+	<script>
+		// Eventos personalizados para GA4 que facilitan el seguimiento diario
+		document.addEventListener('DOMContentLoaded', function(){
+			var trackedCtas = document.querySelectorAll('[data-track-cta]');
+			function sendEvent(action,label,category){
+				if(typeof window.gtag !== 'function'){return;}
+				window.gtag('event', action, {
+					event_category: category || 'engagement',
+					event_label: label
+				});
+			}
+			trackedCtas.forEach(function(el){
+				el.addEventListener('click', function(){
+					var label = el.getAttribute('data-track-cta');
+					sendEvent('cta_click', label);
+					if(label.indexOf('whatsapp') > -1){
+						sendEvent('contact_whatsapp', label, 'conversion');
+					}
+				});
+			});
+			var observer = new IntersectionObserver(function(entries){
+				entries.forEach(function(entry){
+					if(entry.isIntersecting && !entry.target.dataset.tracked){
+						entry.target.dataset.tracked = 'true';
+						sendEvent('section_view', entry.target.dataset.trackSection);
+					}
+				});
+			}, {threshold:0.5});
+			document.querySelectorAll('[data-track-section]').forEach(function(section){
+				observer.observe(section);
+			});
+			var scrollTracked = false;
+			window.addEventListener('scroll', function(){
+				if(scrollTracked){return;}
+				var scrollPosition = window.scrollY + window.innerHeight;
+				var docHeight = document.documentElement.scrollHeight;
+				if(docHeight && scrollPosition / docHeight >= 0.75){
+					scrollTracked = true;
+					sendEvent('scroll_depth_75', 'global_engagement');
+				}
+			}, {passive:true});
+		});
+	</script>
 </body>
 </html>
